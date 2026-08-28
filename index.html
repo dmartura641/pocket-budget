@@ -22,7 +22,7 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
 </head>
 <body>
 <main class="app">
-  <section class="hero"><h1>Pocket Budget</h1><p>Only log what you actually buy. Fixed bills are already accounted for.</p></section>
+  <section class="hero"><h1>Pocket Budget</h1><p>Only log variable purchases. Hungryroot and other fixed bills are already accounted for.</p></section>
 
   <section class="summary">
     <div class="card"><div class="label">Variable budget left</div><div class="value" id="variableLeft">$850.00</div></div>
@@ -35,7 +35,7 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
       <div class="field"><label for="amount">Amount</label><input id="amount" inputmode="decimal" type="number" min="0.01" step="0.01" placeholder="0.00" required autofocus></div>
       <div class="field"><label for="category">Category</label>
         <select id="category" required>
-          <option>Groceries / Hungryroot</option>
+          <option>Groceries</option>
           <option>Gas</option>
           <option>Incidentals / discretionary</option>
           <option>Other variable</option>
@@ -79,12 +79,13 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
 const MONTHLY_INCOME=4442.66;
 const FIXED=[
  ['Mortgage',1848],['HOA',352.36],['ComEd',100],['Peoples Gas',32],['Internet',60.39],['Phone',70.31],
+ ['Hungryroot', 403.09],
  ['Car payment',477.14],['Car insurance sinking fund',93],['Motorcycle insurance sinking fund',11],
  ['Traditional gym',65],['Swordfighting',215],['Other subscriptions',82.19],
  ['Citi minimum',168.15],['Discover minimum',113],['Retirement loan',88.34]
 ];
 const BUCKETS=[
- {name:'Groceries / Hungryroot',budget:650},
+ {name:'Groceries',budget:246.91},
  {name:'Gas',budget:100},
  {name:'Incidentals / discretionary',budget:100},
  {name:'Other variable',budget:0}
@@ -93,7 +94,7 @@ const FIXED_TOTAL=FIXED.reduce((s,x)=>s+x[1],0);
 const PLANNED_VARIABLE=BUCKETS.reduce((s,x)=>s+x.budget,0);
 const BASELINE=FIXED_TOTAL+PLANNED_VARIABLE;
 const PLANNED_MARGIN=MONTHLY_INCOME-BASELINE;
-const KEY='pocketBudget_entries_v3';
+const KEY='pocketBudget_entries_v4';
 const $=x=>document.getElementById(x);
 let data=[];try{data=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(data))data=[]}catch{data=[]}
 let shownMonth=new Date();shownMonth.setDate(1);
