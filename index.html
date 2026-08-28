@@ -94,7 +94,7 @@ const FIXED_TOTAL=FIXED.reduce((s,x)=>s+x[1],0);
 const PLANNED_VARIABLE=BUCKETS.reduce((s,x)=>s+x.budget,0);
 const BASELINE=FIXED_TOTAL+PLANNED_VARIABLE;
 const PLANNED_MARGIN=MONTHLY_INCOME-BASELINE;
-const KEY='pocketBudget_entries_v4';
+const KEY='pocketBudget_entries_v3';
 const $=x=>document.getElementById(x);
 let data=[];try{data=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(data))data=[]}catch{data=[]}
 let shownMonth=new Date();shownMonth.setDate(1);
