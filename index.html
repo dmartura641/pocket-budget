@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Pocket Budget</title>
+<style>
+:root{--bg:#0b1020;--panel:#141b2d;--panel2:#1b2438;--text:#f3f6fb;--muted:#98a4b8;--border:#2a3550;--accent:#8ab4ff;--good:#83d39b;--warn:#efc06b;--bad:#ef8f8f}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);padding-bottom:max(18px,env(safe-area-inset-bottom))}
+.app{max-width:720px;margin:0 auto;padding:14px 12px 30px}.hero{padding:8px 2px 12px}.hero h1{font-size:1.4rem;margin:0 0 3px}.hero p{margin:0;color:var(--muted);font-size:.9rem}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px}.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:13px}.label{color:var(--muted);font-size:.76rem}.value{font-size:1.4rem;font-weight:800;margin-top:3px}.wide{grid-column:1/-1}.good{color:var(--good)}.bad{color:var(--bad)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:9px}label{display:block;font-size:.78rem;color:var(--muted);margin:0 0 5px}.field{min-width:0}.full{grid-column:1/-1}
+input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);padding:11px 12px;font-size:16px}input[type=number]{font-size:1.3rem;font-weight:700}.save{width:100%;min-height:54px;border:0;border-radius:14px;background:var(--accent);color:#081120;font-weight:800;font-size:1.05rem}.secondary,.danger{min-height:44px;border-radius:11px;padding:9px 12px;background:var(--panel2);color:var(--text);border:1px solid var(--border);font-weight:650}.danger{color:var(--bad)}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:16px 2px 8px}.section-title h2{font-size:1rem;margin:0}.section-title span{color:var(--muted);font-size:.78rem}.bucket{padding:10px 0;border-bottom:1px solid var(--border)}.bucket:last-child{border-bottom:0}.bucket-head{display:flex;justify-content:space-between;gap:10px;font-size:.88rem}.bar{height:8px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:7px 0 4px}.fill{height:100%;background:var(--accent)}.fill.over{background:var(--bad)}.sub{font-size:.75rem;color:var(--muted)}
+.entry{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}.entry:last-child{border-bottom:0}.entry-main{min-width:0}.entry-top{display:flex;justify-content:space-between;gap:10px}.entry-cat{font-weight:700}.entry-amt{font-weight:800}.entry-meta{color:var(--muted);font-size:.76rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.iconbtn{border:1px solid var(--border);background:transparent;color:var(--bad);border-radius:10px;min-width:42px;min-height:42px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.empty{color:var(--muted);font-size:.88rem;padding:8px 0}.install-note{font-size:.76rem;color:var(--muted);line-height:1.35;margin-top:10px}.monthnav{display:flex;gap:7px;align-items:center}.monthnav button{min-width:42px;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--panel2);color:var(--text)}
+.billgrid{display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:.86rem}.billgrid .amt{text-align:right;font-variant-numeric:tabular-nums}.hr{height:1px;background:var(--border);margin:10px 0}
+@media(max-width:460px){.summary{grid-template-columns:1fr 1fr}.app{padding-left:9px;padding-right:9px}form{grid-template-columns:1fr}.field,.full{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="hero"><h1>Pocket Budget</h1><p>Only log what you actually buy. Fixed bills are already accounted for.</p></section>
+
+  <section class="summary">
+    <div class="card"><div class="label">Variable budget left</div><div class="value" id="variableLeft">$850.00</div></div>
+    <div class="card"><div class="label">Logged this month</div><div class="value" id="logged">$0.00</div></div>
+    <div class="card wide"><div class="label">Projected Citi attack money</div><div class="value good" id="attack">$126.78</div><div class="sub" id="attackSub">If the rest of the month stays on budget.</div></div>
+  </section>
+
+  <section class="card">
+    <form id="entryForm">
+      <div class="field"><label for="amount">Amount</label><input id="amount" inputmode="decimal" type="number" min="0.01" step="0.01" placeholder="0.00" required autofocus></div>
+      <div class="field"><label for="category">Category</label>
+        <select id="category" required>
+          <option>Groceries / Hungryroot</option>
+          <option>Gas</option>
+          <option>Incidentals / discretionary</option>
+          <option>Other variable</option>
+        </select>
+      </div>
+      <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+      <div class="field"><label for="note">Note</label><input id="note" type="text" maxlength="80" placeholder="Optional"></div>
+      <div class="full"><button class="save" type="submit">Save purchase</button></div>
+    </form>
+  </section>
+
+  <div class="section-title"><h2>Spending buckets</h2><span>What you control day-to-day</span></div>
+  <section class="card" id="buckets"></section>
+
+  <div class="section-title"><h2>Fixed monthly plan</h2><span>Already reserved</span></div>
+  <section class="card">
+    <div class="billgrid" id="fixedBills"></div>
+    <div class="hr"></div>
+    <div class="billgrid"><strong>Fixed + planned variable</strong><strong class="amt" id="baselineTotal"></strong></div>
+  </section>
+
+  <div class="section-title">
+    <h2>Checkbook</h2>
+    <div class="monthnav"><button type="button" id="prevMonth" aria-label="Previous month">‹</button><span id="monthLabel"></span><button type="button" id="nextMonth" aria-label="Next month">›</button></div>
+  </div>
+  <section class="card"><div id="entries"></div></section>
+
+  <section class="card" style="margin-top:14px">
+    <div class="label">Backup & portability</div>
+    <div class="actions">
+      <button type="button" class="secondary" id="exportCsv">Export CSV</button>
+      <button type="button" class="secondary" id="backupJson">Backup</button>
+      <button type="button" class="secondary" id="restoreBtn">Restore</button>
+      <input id="restoreFile" type="file" accept="application/json,.json" hidden>
+      <button type="button" class="danger" id="clearBtn">Clear data</button>
+    </div>
+    <div class="install-note">Your purchases are stored only on this device. Make occasional backups if you care about preserving history.</div>
+  </section>
+</main>
+<script>
+const MONTHLY_INCOME=4442.66;
+const FIXED=[
+ ['Mortgage',1848],['HOA',352.36],['ComEd',100],['Peoples Gas',32],['Internet',60.39],['Phone',70.31],
+ ['Car payment',477.14],['Car insurance sinking fund',93],['Motorcycle insurance sinking fund',11],
+ ['Traditional gym',65],['Swordfighting',215],['Other subscriptions',82.19],
+ ['Citi minimum',168.15],['Discover minimum',113],['Retirement loan',88.34]
+];
+const BUCKETS=[
+ {name:'Groceries / Hungryroot',budget:650},
+ {name:'Gas',budget:100},
+ {name:'Incidentals / discretionary',budget:100},
+ {name:'Other variable',budget:0}
+];
+const FIXED_TOTAL=FIXED.reduce((s,x)=>s+x[1],0);
+const PLANNED_VARIABLE=BUCKETS.reduce((s,x)=>s+x.budget,0);
+const BASELINE=FIXED_TOTAL+PLANNED_VARIABLE;
+const PLANNED_MARGIN=MONTHLY_INCOME-BASELINE;
+const KEY='pocketBudget_entries_v3';
+const $=x=>document.getElementById(x);
+let data=[];try{data=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(data))data=[]}catch{data=[]}
+let shownMonth=new Date();shownMonth.setDate(1);
+function localISO(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function ym(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
+function money(n){return Number(n).toLocaleString('en-US',{style:'currency',currency:'USD'})}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+$('date').value=localISO();
+
+const fb=$('fixedBills');
+FIXED.forEach(([name,amt])=>{fb.insertAdjacentHTML('beforeend',`<span>${escapeHtml(name)}</span><span class="amt">${money(amt)}</span>`)});
+$('baselineTotal').textContent=money(BASELINE);
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function render(){
+ const current=ym(shownMonth);
+ const rows=data.filter(x=>x.date.startsWith(current));
+ const now=ym(new Date());
+ const currentRows=data.filter(x=>x.date.startsWith(now));
+ const logged=currentRows.reduce((s,x)=>s+x.amount,0);
+ const variableLeft=PLANNED_VARIABLE-logged;
+ const projectedAttack=PLANNED_MARGIN+Math.max(0,variableLeft);
+
+ $('logged').textContent=money(logged);
+ $('variableLeft').textContent=money(variableLeft);
+ $('variableLeft').className='value '+(variableLeft<0?'bad':'');
+ $('attack').textContent=money(projectedAttack);
+ $('attack').className='value '+(projectedAttack>=0?'good':'bad');
+ $('attackSub').textContent=variableLeft>=0?'If the rest of the month stays on budget.':'Variable spending is over plan.';
+ $('monthLabel').textContent=shownMonth.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+
+ const buckets=$('buckets');buckets.innerHTML='';
+ BUCKETS.filter(c=>c.budget>0).forEach(c=>{
+   const used=currentRows.filter(x=>x.category===c.name).reduce((s,x)=>s+x.amount,0);
+   const pct=Math.min(100,used/c.budget*100);
+   const el=document.createElement('div');el.className='bucket';
+   el.innerHTML=`<div class="bucket-head"><strong>${c.name}</strong><span>${money(used)} / ${money(c.budget)}</span></div><div class="bar"><div class="fill ${used>c.budget?'over':''}" style="width:${pct}%"></div></div><div class="sub">${used<=c.budget?money(c.budget-used)+' left':money(used-c.budget)+' over'}</div>`;
+   buckets.appendChild(el)
+ });
+
+ const wrap=$('entries');wrap.innerHTML='';
+ const sorted=[...rows].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ if(!sorted.length){wrap.innerHTML='<div class="empty">No purchases logged for this month.</div>'}
+ else sorted.forEach(x=>{
+   const el=document.createElement('div');el.className='entry';
+   el.innerHTML=`<div class="entry-main"><div class="entry-top"><span class="entry-cat">${escapeHtml(x.category)}</span><span class="entry-amt">${money(x.amount)}</span></div><div class="entry-meta">${x.date}${x.note?' · '+escapeHtml(x.note):''}</div></div><button class="iconbtn" type="button" aria-label="Delete entry" data-id="${x.id}">×</button>`;
+   wrap.appendChild(el)
+ });
+ wrap.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>{data=data.filter(x=>x.id!==Number(b.dataset.id));save()}));
+}
+
+$('entryForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const amount=Number($('amount').value);
+ if(!Number.isFinite(amount)||amount<=0)return;
+ data.push({id:Date.now(),date:$('date').value,amount:Math.round(amount*100)/100,category:$('category').value,note:$('note').value.trim()});
+ $('amount').value='';$('note').value='';
+ shownMonth=new Date($('date').value+'T12:00:00');shownMonth.setDate(1);
+ save();$('amount').focus();
+});
+$('prevMonth').addEventListener('click',()=>{shownMonth.setMonth(shownMonth.getMonth()-1);render()});
+$('nextMonth').addEventListener('click',()=>{shownMonth.setMonth(shownMonth.getMonth()+1);render()});
+
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('exportCsv').addEventListener('click',()=>{const rows=[['Date','Category','Note','Amount'],...data.map(x=>[x.date,x.category,x.note,x.amount.toFixed(2)])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');download('pocket-budget.csv',csv,'text/csv')});
+$('backupJson').addEventListener('click',()=>download('pocket-budget-backup.json',JSON.stringify(data,null,2),'application/json'));
+$('restoreBtn').addEventListener('click',()=>$('restoreFile').click());
+$('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d))throw new Error();data=d;save()}catch{alert('Invalid backup file.')}e.target.value=''});
+$('clearBtn').addEventListener('click',()=>{if(confirm('Delete all logged purchases from this device?')){data=[];save()}});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+render();
+</script>
+</body>
+</html>
