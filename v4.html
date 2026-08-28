@@ -22,12 +22,12 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
 </head>
 <body>
 <main class="app">
-  <section class="hero"><h1>Pocket Budget <span style="font-size:.7rem;color:var(--muted);font-weight:600">v4</span></h1><p>Only log variable purchases. Hungryroot is fixed; Groceries is tracked separately.</p></section>
+  <section class="hero"><h1>Pocket Budget <span style="font-size:.7rem;color:var(--muted);font-weight:600">v4</span></h1></section>
 
   <section class="summary">
     <div class="card"><div class="label">Variable budget left</div><div class="value" id="variableLeft">$850.00</div></div>
     <div class="card"><div class="label">Logged this month</div><div class="value" id="logged">$0.00</div></div>
-    <div class="card wide"><div class="label">Projected Citi attack money</div><div class="value good" id="attack">$126.78</div><div class="sub" id="attackSub">If the rest of the month stays on budget.</div></div>
+    <div class="card wide"><div class="label">Projected Citi attack money</div><div class="value good" id="attack">$126.78</div><div class="sub" id="attackSub"></div></div>
   </section>
 
   <section class="card">
@@ -47,7 +47,7 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
     </form>
   </section>
 
-  <div class="section-title"><h2>Spending buckets</h2><span>What you control day-to-day</span></div>
+  <div class="section-title"><h2>Spending buckets</h2><span></span></div>
   <section class="card" id="buckets"></section>
 
   <div class="section-title"><h2>Fixed monthly plan</h2><span>Already reserved</span></div>
@@ -74,7 +74,7 @@ input,select,button{font:inherit}input,select{width:100%;min-height:48px;border:
     </div>
     <div class="install-note">Your purchases are stored only on this device. Make occasional backups if you care about preserving history.</div>
   </section>
-</main>
+<div style="text-align:right;font-size:.72rem;color:var(--muted);padding:18px 4px 4px;">Created by Dan Marturano</div></main>
 <script>
 const MONTHLY_INCOME=4442.66;
 const FIXED=[
@@ -123,7 +123,7 @@ function render(){
  $('variableLeft').className='value '+(variableLeft<0?'bad':'');
  $('attack').textContent=money(projectedAttack);
  $('attack').className='value '+(projectedAttack>=0?'good':'bad');
- $('attackSub').textContent=variableLeft>=0?'If the rest of the month stays on budget.':'Variable spending is over plan.';
+ $('attackSub').textContent=variableLeft>=0?'':'Variable spending is over plan.';
  $('monthLabel').textContent=shownMonth.toLocaleDateString('en-US',{month:'short',year:'numeric'});
 
  const buckets=$('buckets');buckets.innerHTML='';
